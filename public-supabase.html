@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Senderos compartidos</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 24px;
+      background: #f5f7f3;
+      color: #1d1d1d;
+    }
+
+    .route {
+      background: white;
+      border: 1px solid #dfe6df;
+      border-radius: 14px;
+      padding: 18px;
+      margin-bottom: 16px;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.04);
+    }
+
+    h1 {
+      margin-bottom: 18px;
+    }
+
+    .meta {
+      color: #5f6f63;
+      font-size: 0.85rem;
+      margin-bottom: 10px;
+    }
+
+    .participants {
+      margin-top: 12px;
+      margin-bottom: 14px;
+      padding: 12px 14px;
+      background: #f2faf4;
+      border-radius: 10px;
+      border: 1px solid #dcefe3;
+    }
+
+    .chip {
+      display: inline-block;
+      background: #dff4e7;
+      color: #174a2a;
+      padding: 6px 10px;
+      border-radius: 999px;
+      margin-right: 6px;
+      margin-top: 6px;
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+
+    button {
+      background: #1f7a4c;
+      color: white;
+      border: none;
+      padding: 10px 16px;
+      border-radius: 8px;
+      font-weight: 700;
+      cursor: pointer;
+      margin-top: 8px;
+    }
+
+    button.secondary {
+      background: #edf6ef;
+      color: #1a5c39;
+      border: 1px solid #cfe5d7;
+    }
+
+    .status {
+      min-height: 24px;
+      margin-bottom: 12px;
+      color: #1a5c39;
+      font-size: 0.95rem;
+    }
+  </style>
+</head>
+<body>
+  <h1>Senderos</h1>
+
+  <div class="status" id="statusText"></div>
+  <div id="routes"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    const supabaseUrl = "TU_SUPABASE_URL";
+    const supabaseKey = "TU_SUPABASE_ANON_KEY";
+    const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+
+    const currentUserId = localStorage.getItem("anon_user_id") || crypto.randomUUID();
+    localStorage.setItem("anon_user_id", currentUserId);
+
+    const displayName = localStorage.getItem("anon_display_name") || "Anónimo";
+    if (!localStorage.getItem("anon_display_name")) {
+      localStorage.setItem("anon_display_name", displayName);
+    }
+
+    const statusText = document.getElementById("statusText");
+    const routesEl = document.getElementById("routes");
+
+    function setStatus(message, isError = false) {
+      statusText.textContent = message;
+      statusText.style.color = isError ? "#b42318" : "#1a5c39";
+    }
+
+    function escapeHtml(str) {
+      return String(str)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/\"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+    async function getRoutes() {
+      const { data, error } = await supabase
+        .from("routes")
+        .select(`
+          *,
+          route_participants (
+            id,
+            user_id,
+            display_name
+          )
+        `)
+        .order("created_at", { ascending: false });
+
+      if (error) {
+        console.error(error);
+        setStatus("No se pudieron cargar los senderos.", true);
+        return;
+      }
+
+      renderRoutes(data || []);
+    }
+
+    async function joinRoute(routeId) {
+      const { error } = await supabase.from("route_participants").insert([
+        {
+          route_id: routeId,
+          user_id: currentUserId,
+          display_name: localStorage.getItem("anon_display_name") || "Anónimo"
+        }
+      ]);
+
+      if (error) {
+        console.error(error);
+        if (error.code === "23505") {
+          setStatus("Ya estás apuntado a este sendero.");
+          return;
+        }
+        setStatus("No se pudo apuntarte.", true);
+        return;
+      }
+
+      setStatus("Te has apuntado correctamente.");
+      await getRoutes();
+    }
+
+    async function leaveRoute(routeId) {
+      const { error } = await supabase
+        .from("route_participants")
+        .delete()
+        .eq("route_id", routeId)
+        .eq("user_id", currentUserId);
+
+      if (error) {
+        console.error(error);
+        setStatus("No se pudo quitar tu participación.", true);
+        return;
+      }
+
+      setStatus("Has salido del sendero.");
+      await getRoutes();
+    }
+
+    function renderRoutes(routes) {
+      routesEl.innerHTML = "";
+
+      if (!routes.length) {
+        routesEl.innerHTML = "<div class='route'><p>No hay senderos todavía.</p></div>";
+        return;
+      }
+
+      routes.forEach((route) => {
+        const participants = route.route_participants || [];
+        const userJoined = participants.some(p => p.user_id === currentUserId);
+
+        const participantHtml = participants.length
+          ? participants.map(p => `<span class='chip'>${escapeHtml(p.display_name)}</span>`).join("")
+          : "<span>No hay participantes aún.</span>";
+
+        const card = document.createElement("div");
+        card.className = "route";
+
+        card.innerHTML = `
+          <h2>${escapeHtml(route.name)}</h2>
+          <div class="meta">${new Date(route.created_at).toLocaleString()}</div>
+          <p>${escapeHtml(route.description || "")}</p>
+
+          <div class="participants">
+            <strong>Apuntados:</strong><br>
+            ${participantHtml}
+          </div>
+
+          ${userJoined
+            ? '<button class="secondary" type="button" data-action="leave" data-route-id="' + route.id + '">Quitar participación</button>'
+            : '<button type="button" data-action="join" data-route-id="' + route.id + '">Apuntarse</button>'
+          }
+        `;
+
+        routesEl.appendChild(card);
+      });
+
+      document.querySelectorAll("[data-action]").forEach((button) => {
+        button.addEventListener("click", async () => {
+          const routeId = button.dataset.routeId;
+          const action = button.dataset.action;
+
+          if (action === "join") {
+            await joinRoute(routeId);
+          } else if (action === "leave") {
+            await leaveRoute(routeId);
+          }
+        });
+      });
+    }
+
+    async function subscribeChanges() {
+      supabase
+        .channel("routes-live")
+        .on(
+          "postgres_changes",
+          { event: "*", schema: "public", table: "routes" },
+          () => getRoutes()
+        )
+        .on(
+          "postgres_changes",
+          { event: "*", schema: "public", table: "route_participants" },
+          () => getRoutes()
+        )
+        .subscribe();
+    }
+
+    getRoutes();
+    subscribeChanges();
+  </script>
+</body>
+</html>
