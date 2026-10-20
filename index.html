@@ -67,7 +67,22 @@
             fill: none;
             filter: drop-shadow(0 1px 0 rgba(0,0,0,0.12));
         }
+        .diploma-highlight {
+            color: #be123c;
+            font-weight: 800;
+        }
+        @page {
+            size: A4 landscape;
+            margin: 8mm;
+        }
         @media print {
+            html, body {
+                width: 100%;
+                height: 100%;
+                background: white !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
             body * { visibility: hidden; }
             #printable-diploma, #printable-diploma * { visibility: visible; }
             #printable-diploma {
@@ -75,6 +90,7 @@
                 left: 0;
                 top: 0;
                 width: 100%;
+                max-width: 100%;
                 height: auto;
                 margin: 0;
                 padding: 0;
@@ -478,7 +494,7 @@
                         </h3>
 
                         <p class="text-xs md:text-sm text-stone-700 leading-relaxed max-w-xl mx-auto mb-6">
-                            Por su excelente participación en los senderismos dentro del Programa "Por un Millón de pasos".
+                            Por su excelente participación en los senderismos dentro del Programa "<span class="diploma-highlight">Por un Millón de pasos</span>".
                         </p>
 
                         <div class="grid grid-cols-2 gap-4 text-[10px] md:text-xs text-stone-500 pt-6 border-t border-stone-200 max-w-md mx-auto">
