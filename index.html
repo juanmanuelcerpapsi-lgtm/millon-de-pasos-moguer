@@ -67,6 +67,14 @@
             fill: none;
             filter: drop-shadow(0 1px 0 rgba(0,0,0,0.12));
         }
+        .signature-image {
+            width: 220px;
+            height: auto;
+            max-height: 84px;
+            display: block;
+            object-fit: contain;
+            filter: drop-shadow(0 1px 0 rgba(0,0,0,0.12));
+        }
         .diploma-highlight {
             color: #be123c;
             font-weight: 800;
@@ -432,7 +440,7 @@
 
                 <div class="bg-stone-50 border border-stone-200 rounded-xl p-4 text-xs text-stone-600 leading-relaxed space-y-2 mb-6 max-h-48 overflow-y-auto">
                     <p class="font-semibold text-stone-800">Información básica sobre Protección de Datos:</p>
-                    <p>En cumplimiento del Reglamento General de Protección de Datos (RGPD), le informamos que sus datos personales serán tratados por el Patronato Municipal de Deportes de Moguer al amparo del programa "Un Millón de Pasos".</p>
+                    <p>En cumplimiento del Reglamento General de Protección de Datos (RGPD), le informamos que sus datos personales serán tratados por el Patronato Municipal de Deportes de Moguer.</p>
                     <p class="font-semibold text-brand-700">Finalidad Exclusiva:</p>
                     <p>Sus datos (*Nombre, Apellidos, Edad y Correo Electrónico*) se utilizarán para la elaboración de la lista de participación de la actividad "Un Millón de Pasos".</p>
                     <p>No se cederán datos a terceros salvo obligación legal.</p>
@@ -468,7 +476,7 @@
                     </div>
                 </div>
 
-                <div id="printable-diploma" class="relative border-[10px] border-brand-800 rounded-[28px] bg-gradient-to-b from-stone-50 via-white to-stone-50 text-center shadow-inner overflow-hidden p-6 md:p-8">
+                <div id="printable-diploma" class="relative border-[10px] border-brand-800 rounded-[28px] bg-gradient-to-b from-stone-50 via-white to-stone-50 text-center shadow-inner overflow-hidden">
                     <div class="diploma-watermark">PMD</div>
                     <div class="absolute inset-4 border-2 border-amber-400/70 rounded-[18px]"></div>
                     <div class="absolute inset-x-10 top-5 h-px bg-gradient-to-r from-transparent via-amber-400 to-transparent"></div>
@@ -476,12 +484,7 @@
 
                     <div class="relative z-10 border-2 border-amber-500/40 rounded-2xl p-4 md:p-6 bg-white/70">
                         <div class="flex justify-between items-center mb-6 px-2 md:px-4">
-                            <svg class="signature-svg" viewBox="0 0 320 120" aria-label="Firma del Ayuntamiento" role="img">
-                                <path d="M16 92 C 52 110, 80 90, 110 70 C 140 47, 162 33, 187 79 C 208 116, 245 96, 272 71 C 286 58, 300 55, 314 62"/>
-                                <path d="M180 74 C 196 59, 214 62, 230 74 C 246 85, 257 88, 268 81"/>
-                                <path d="M135 44 C 148 30, 171 25, 189 37"/>
-                                <path d="M177 14 C 157 31, 144 48, 147 74"/>
-                            </svg>
+                            <img src="ayto%20moguer.jpg" alt="Firma del Ayuntamiento de Moguer" class="signature-image" onerror="this.style.display='none'">
                             <img src="pmd%20moguer.jfif" alt="PMD Moguer" class="h-12 w-auto object-contain" onerror="this.src='pmd_2.jpg'">
                         </div>
 
