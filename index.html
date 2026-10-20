@@ -41,6 +41,21 @@
             background-image: radial-gradient(#e11d48 1px, transparent 1px);
             background-size: 16px 16px;
         }
+        .diploma-watermark {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            pointer-events: none;
+            opacity: 0.07;
+            font-size: clamp(5rem, 12vw, 12rem);
+            font-weight: 900;
+            letter-spacing: 0.2em;
+            color: #7f1d1d;
+            transform: rotate(-24deg);
+            user-select: none;
+        }
         @media print {
             body * { visibility: hidden; }
             #printable-diploma, #printable-diploma * { visibility: visible; }
@@ -426,26 +441,31 @@
                     </div>
                 </div>
 
-                <div id="printable-diploma" class="border-8 border-brand-800 p-8 rounded-xl bg-gradient-to-b from-stone-50 via-white to-stone-50 text-center relative overflow-hidden shadow-inner">
-                    <div class="border-2 border-amber-500/40 p-6 rounded-lg">
-                        <div class="flex justify-between items-center mb-6 px-4">
+                <div id="printable-diploma" class="relative border-[10px] border-brand-800 rounded-[28px] bg-gradient-to-b from-stone-50 via-white to-stone-50 text-center shadow-inner overflow-hidden p-6 md:p-8">
+                    <div class="diploma-watermark">PMD</div>
+                    <div class="absolute inset-4 border-2 border-amber-400/70 rounded-[18px]"></div>
+                    <div class="absolute inset-x-10 top-5 h-px bg-gradient-to-r from-transparent via-amber-400 to-transparent"></div>
+                    <div class="absolute inset-x-10 bottom-5 h-px bg-gradient-to-r from-transparent via-amber-400 to-transparent"></div>
+
+                    <div class="relative z-10 border-2 border-amber-500/40 rounded-2xl p-4 md:p-6 bg-white/70">
+                        <div class="flex justify-between items-center mb-6 px-2 md:px-4">
                             <img src="ayto%20moguer.jpg" alt="Ayto Moguer" class="h-12 w-auto object-contain">
                             <img src="pmd%20moguer.jfif" alt="PMD Moguer" class="h-12 w-auto object-contain" onerror="this.src='pmd_2.jpg'">
                         </div>
 
-                        <p class="text-xs font-bold tracking-widest text-brand-800 uppercase mb-1">Patronato Municipal de Deportes de Moguer</p>
-                        <h2 class="text-3xl font-extrabold text-stone-900 tracking-tight mb-4">DIPLOMA DE PARTICIPACIÓN</h2>
+                        <p class="text-[10px] md:text-xs font-extrabold tracking-[0.35em] text-brand-800 uppercase mb-3">Patronato Municipal de Deportes de Moguer</p>
+                        <h2 class="text-2xl md:text-4xl font-extrabold text-stone-900 tracking-tight mb-4">DIPLOMA DE PARTICIPACIÓN</h2>
 
-                        <p class="text-sm text-stone-600 italic mb-2">Otorgado con orgullo a:</p>
-                        <h3 class="text-2xl font-black text-brand-700 border-b-2 border-amber-400 inline-block px-8 py-1 mb-4 uppercase tracking-wide">
+                        <p class="text-xs md:text-sm text-stone-600 italic mb-3">Otorgado con orgullo a:</p>
+                        <h3 class="text-xl md:text-3xl font-black text-brand-700 border-b-2 border-amber-400 inline-block px-6 md:px-10 py-1 mb-4 uppercase tracking-wide">
                             {{ activeDiplomaParticipant?.fullName }}
                         </h3>
 
-                        <p class="text-sm text-stone-700 leading-relaxed max-w-xl mx-auto mb-6">
+                        <p class="text-xs md:text-sm text-stone-700 leading-relaxed max-w-xl mx-auto mb-6">
                             Por su excelente participación en los senderismos dentro del Programa "Por un Millón de pasos".
                         </p>
 
-                        <div class="grid grid-cols-2 gap-4 text-xs text-stone-500 pt-6 border-t border-stone-200 max-w-md mx-auto">
+                        <div class="grid grid-cols-2 gap-4 text-[10px] md:text-xs text-stone-500 pt-6 border-t border-stone-200 max-w-md mx-auto">
                             <div>
                                 <p class="font-bold text-stone-800">Moguer, Huelva</p>
                                 <p>{{ currentDateFormatted }}</p>
