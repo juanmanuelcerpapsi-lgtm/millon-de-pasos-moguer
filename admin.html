@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin - Crear sendero</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 700px;
+      margin: 40px auto;
+      padding: 24px;
+    }
+
+    form {
+      display: grid;
+      gap: 12px;
+    }
+
+    input, textarea, button {
+      width: 100%;
+      padding: 12px;
+      font-size: 16px;
+      border-radius: 10px;
+    }
+
+    input, textarea {
+      border: 1px solid #d9ddd9;
+    }
+
+    button {
+      background: #1f7a4c;
+      color: white;
+      border: none;
+      cursor: pointer;
+      font-weight: 700;
+    }
+
+    .status {
+      margin-top: 12px;
+      min-height: 20px;
+      color: #1a5c39;
+    }
+  </style>
+</head>
+<body>
+  <h1>Crear sendero (solo administrador)</h1>
+
+  <form id="adminForm">
+    <input id="adminKey" type="password" placeholder="Clave del administrador" required />
+    <input id="routeName" type="text" placeholder="Nombre del sendero" required />
+    <textarea id="routeDescription" placeholder="Descripción"></textarea>
+    <button type="submit">Crear sendero</button>
+  </form>
+
+  <div id="status" class="status"></div>
+
+  <script>
+    const edgeFunctionUrl = "https://TU_PROYECTO.supabase.co/functions/v1/create-route";
+
+    document.getElementById("adminForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const adminKey = document.getElementById("adminKey").value;
+      const routeName = document.getElementById("routeName").value.trim();
+      const routeDescription = document.getElementById("routeDescription").value.trim();
+
+      const status = document.getElementById("status");
+
+      if (!adminKey || !routeName) {
+        status.textContent = "Falta la clave o el nombre del sendero.";
+        status.style.color = "#b42318";
+        return;
+      }
+
+      status.textContent = "Creando sendero...";
+
+      try {
+        const response = await fetch(edgeFunctionUrl, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "x-admin-key": adminKey
+          },
+          body: JSON.stringify({
+            name: routeName,
+            description: routeDescription
+          })
+        });
+
+        const json = await response.json();
+
+        if (!response.ok) {
+          throw new Error(json.error || "Error al crear sendero");
+        }
+
+        status.textContent = "Sendero creado correctamente.";
+        status.style.color = "#1a5c39";
+        document.getElementById("adminForm").reset();
+      } catch (err) {
+        status.textContent = err.message;
+        status.style.color = "#b42318";
+      }
+    });
+  </script>
+</body>
+</html>
