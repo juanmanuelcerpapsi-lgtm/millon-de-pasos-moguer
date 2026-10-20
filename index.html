@@ -69,8 +69,17 @@
         }
         .signature-image {
             width: 220px;
+            max-width: 100%;
             height: auto;
             max-height: 84px;
+            display: block;
+            object-fit: contain;
+            filter: drop-shadow(0 1px 0 rgba(0,0,0,0.12));
+        }
+        .municipal-logo {
+            width: 120px;
+            max-width: 100%;
+            height: auto;
             display: block;
             object-fit: contain;
             filter: drop-shadow(0 1px 0 rgba(0,0,0,0.12));
@@ -483,9 +492,13 @@
                     <div class="absolute inset-x-10 bottom-5 h-px bg-gradient-to-r from-transparent via-amber-400 to-transparent"></div>
 
                     <div class="relative z-10 border-2 border-amber-500/40 rounded-2xl p-4 md:p-6 bg-white/70">
+                        <div class="flex justify-end mb-4 px-2 md:px-4">
+                            <img src="ayto%20moguer.jpg" alt="Ayuntamiento de Moguer" class="municipal-logo" onerror="this.style.display='none'">
+                        </div>
+
                         <div class="flex justify-between items-center mb-6 px-2 md:px-4">
-                            <img src="ayto%20moguer.jpg" alt="Firma del Ayuntamiento de Moguer" class="signature-image" onerror="this.style.display='none'">
                             <img src="pmd%20moguer.jfif" alt="PMD Moguer" class="h-12 w-auto object-contain" onerror="this.src='pmd_2.jpg'">
+                            <img src="ayto%20moguer.jpg" alt="Ayuntamiento de Moguer" class="municipal-logo hidden sm:block" onerror="this.style.display='none'">
                         </div>
 
                         <p class="text-[10px] md:text-xs font-extrabold tracking-[0.35em] text-brand-800 uppercase mb-3">Patronato Municipal de Deportes de Moguer</p>
@@ -505,9 +518,9 @@
                                 <p class="font-bold text-stone-800">Moguer, Huelva</p>
                                 <p>{{ currentDateFormatted }}</p>
                             </div>
-                            <div>
+                            <div class="flex flex-col items-center justify-center">
                                 <p class="font-bold text-stone-800">PMD Moguer</p>
-                                <p class="italic text-stone-400">Firma Digital Oficial</p>
+                                <img src="ayto%20moguer.jpg" alt="Firma del Ayuntamiento de Moguer" class="signature-image mt-2" onerror="this.style.display='none'">
                             </div>
                         </div>
                     </div>
