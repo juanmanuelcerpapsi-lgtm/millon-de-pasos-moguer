@@ -45,13 +45,24 @@
             body * { visibility: hidden; }
             #printable-diploma, #printable-diploma * { visibility: visible; }
             #printable-diploma {
-                position: absolute;
+                position: fixed;
                 left: 0;
                 top: 0;
                 width: 100%;
-                height: 100%;
+                height: auto;
                 margin: 0;
                 padding: 0;
+                overflow: visible;
+                background: white;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+            #printable-diploma img {
+                display: block;
+                max-width: 100%;
+                height: auto;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
             }
             .no-print { display: none !important; }
         }
@@ -75,7 +86,7 @@
                 </div>
 
                 <div class="flex items-center space-x-3">
-                    <button @click="isAdmin = !isAdmin" 
+                    <button @click="toggleAdminAccess" 
                             :class="isAdmin ? 'bg-amber-500 text-stone-900 font-bold' : 'bg-brand-800 text-brand-200 hover:text-white'"
                             class="px-3 py-1.5 rounded-lg text-xs flex items-center gap-1.5 transition-all shadow-inner border border-brand-700">
                         <i class="fa-solid" :class="isAdmin ? 'fa-user-shield' : 'fa-lock'"></i>
@@ -146,7 +157,7 @@
                 <div v-if="filteredRoutes.length > 0" class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div v-for="route in filteredRoutes" :key="route.id" 
                          class="bg-white rounded-2xl border border-stone-200 shadow-sm hover:shadow-md transition-all overflow-hidden flex flex-col justify-between">
-                         <div>
+                        <div>
                             <div class="bg-stone-100/70 p-5 border-b border-stone-100 flex justify-between items-start">
                                 <div>
                                     <span class="text-xs font-bold uppercase tracking-wider text-brand-700 bg-brand-50 px-2.5 py-1 rounded-md border border-brand-100 inline-block mb-2">
@@ -339,7 +350,7 @@
                         <div>
                             <label class="block text-xs font-bold text-stone-700 uppercase mb-1">Edad *</label>
                             <input v-model.number="form.age" type="number" min="5" max="100" required placeholder="Ej. 35" 
-                                   class="w-full px-3.5 py-2 border border-stone-300 rounded-xl text-sm focus:ring-2 focus:ring-brand-500 outline-none">
+                                    class="w-full px-3.5 py-2 border border-stone-300 rounded-xl text-sm focus:ring-2 focus:ring-brand-500 outline-none">
                         </div>
                         <div>
                             <label class="block text-xs font-bold text-stone-700 uppercase mb-1">Condición Física *</label>
@@ -379,7 +390,7 @@
 
                 <div class="bg-stone-50 border border-stone-200 rounded-xl p-4 text-xs text-stone-600 leading-relaxed space-y-2 mb-6 max-h-48 overflow-y-auto">
                     <p class="font-semibold text-stone-800">Información básica sobre Protección de Datos:</p>
-                    <p>En cumplimiento del Reglamento General de Protección de Datos (RGPD), le informamos que sus datos personales serán tratados por el Patronato Municipal de Deportes de Moguer.</p>
+                    <p>En cumplimiento del Reglamento General de Protección de Datos (RGPD), le informamos que sus datos personales serán tratados por el Patronato Municipal de Deportes de Moguer al amparo del programa "Un Millón de Pasos".</p>
                     <p class="font-semibold text-brand-700">Finalidad Exclusiva:</p>
                     <p>Sus datos (*Nombre, Apellidos, Edad y Correo Electrónico*) se utilizarán para la elaboración de la lista de participación de la actividad "Un Millón de Pasos".</p>
                     <p>No se cederán datos a terceros salvo obligación legal.</p>
@@ -521,8 +532,9 @@
         createApp({
             data() {
                 return {
+                    adminPassword: 'Los jefazos2026',
                     currentTab: 'routes',
-                    isAdmin: false,
+                    isAdmin: localStorage.getItem('pmd_admin_session') === 'true',
                     searchQuery: '',
                     participantSearch: '',
                     showRegisterModal: false,
@@ -618,6 +630,22 @@
                 getRouteTitle(routeId) {
                     const route = this.routes.find(r => r.id === routeId);
                     return route ? route.title : 'Ruta Un Millón de Pasos';
+                },
+                toggleAdminAccess() {
+                    if (this.isAdmin) {
+                        this.isAdmin = false;
+                        localStorage.removeItem('pmd_admin_session');
+                        return;
+                    }
+
+                    const password = window.prompt('Introduce la clave de acceso del administrador:');
+                    if (password === this.adminPassword) {
+                        this.isAdmin = true;
+                        localStorage.setItem('pmd_admin_session', 'true');
+                        alert('Acceso de administrador activado.');
+                    } else {
+                        alert('Clave incorrecta. No tienes acceso al modo administrador.');
+                    }
                 },
                 openRegisterModal(route) {
                     this.selectedRoute = route;
