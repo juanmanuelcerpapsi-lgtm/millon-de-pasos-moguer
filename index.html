@@ -78,9 +78,9 @@
             font-weight: 800;
         }
         .print-diploma {
-            width: 100%;
+            width: min(100%, 1123px);
             max-width: 1123px;
-            min-height: 760px;
+            aspect-ratio: 1123 / 794;
             margin: 0 auto;
             position: relative;
             display: block;
@@ -93,7 +93,8 @@
         .diploma-inner {
             position: relative;
             z-index: 1;
-            min-height: 740px;
+            width: 100%;
+            height: 100%;
             padding: 28px 42px 26px;
             display: flex;
             flex-direction: column;
@@ -576,9 +577,9 @@
             </div>
         </div>
 
-        <div v-if="showDiplomaModal" class="fixed inset-0 bg-stone-900/80 backdrop-blur-md z-50 flex items-center justify-center p-4 overflow-y-auto">
-            <div class="bg-white rounded-2xl max-w-3xl w-full p-6 shadow-2xl relative my-8">
-                <div class="flex justify-between items-center mb-6 no-print border-b pb-4">
+        <div v-if="showDiplomaModal" class="fixed inset-0 bg-stone-900/80 backdrop-blur-md z-50 flex items-center justify-center p-4 overflow-x-auto overflow-y-auto">
+            <div class="bg-white rounded-2xl w-full max-w-[1120px] p-6 shadow-2xl relative my-8">
+                <div class="flex justify-between items-center mb-6 no-print border-b pb-4 gap-3">
                     <h3 class="font-bold text-stone-800 flex items-center gap-2">
                         <i class="fa-solid fa-certificate text-amber-500"></i>
                         Diploma de Participación
@@ -595,8 +596,8 @@
                 </div>
 
                 <div id="printable-diploma" style="
-                  width: 1123px;
-                  height: 794px;
+                  width: min(100%, 1123px);
+                  aspect-ratio: 1123 / 794;
                   margin: 0 auto;
                   background: #f8f8f8;
                   border: 12px solid #7d1236;
@@ -620,7 +621,7 @@
                     align-items:center;
                     justify-content:center;
                     opacity:0.06;
-                    font-size: 190px;
+                    font-size: clamp(5rem, 9vw, 11rem);
                     font-weight: 900;
                     letter-spacing: 18px;
                     color: #7d1236;
@@ -670,7 +671,7 @@
                       ">Patronato Municipal de Deportes de Moguer</div>
                       <div style="
                         font-weight: 900;
-                        font-size: 54px;
+                        font-size: clamp(2rem, 4vw, 3.4rem);
                         line-height: 1.1;
                         color: #1f1f1f;
                         letter-spacing: -1px;
@@ -689,7 +690,7 @@
                         display:inline-block;
                         border-bottom: 3px solid #f4c96a;
                         padding: 0 26px 8px;
-                        font-size: 42px;
+                        font-size: clamp(1.8rem, 3vw, 2.8rem);
                         font-weight: 900;
                         text-transform: uppercase;
                         color: #b91c39;
@@ -700,7 +701,7 @@
                     <div style="
                       text-align:center;
                       margin-top: 22px;
-                      font-size: 28px;
+                      font-size: clamp(1.15rem, 2vw, 1.8rem);
                       line-height: 1.4;
                       color: #2a2a2a;
                       font-weight: 700;
@@ -739,12 +740,12 @@
                         justify-content:flex-end;
                       ">
                         <div style="font-weight:900; font-size:16px; color:#111827; margin-bottom: 8px;">PMD Moguer</div>
-                        <img src="ayto%20moguer.jpg" alt="Firma del Ayuntamiento" style="
+                        <div style="
                           width: 180px;
-                          height: auto;
+                          height: 42px;
+                          border-top: 2px solid rgba(217,119,6,0.7);
                           display:block;
-                          object-fit: contain;
-                        ">
+                        "></div>
                       </div>
                     </div>
                   </div>
