@@ -56,6 +56,17 @@
             transform: rotate(-24deg);
             user-select: none;
         }
+        .signature-svg {
+            width: 220px;
+            height: 84px;
+            display: block;
+            stroke: #111;
+            stroke-width: 3.5;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            fill: none;
+            filter: drop-shadow(0 1px 0 rgba(0,0,0,0.12));
+        }
         @media print {
             body * { visibility: hidden; }
             #printable-diploma, #printable-diploma * { visibility: visible; }
@@ -72,7 +83,7 @@
                 -webkit-print-color-adjust: exact;
                 print-color-adjust: exact;
             }
-            #printable-diploma img {
+            #printable-diploma img, #printable-diploma svg {
                 display: block;
                 max-width: 100%;
                 height: auto;
@@ -449,7 +460,12 @@
 
                     <div class="relative z-10 border-2 border-amber-500/40 rounded-2xl p-4 md:p-6 bg-white/70">
                         <div class="flex justify-between items-center mb-6 px-2 md:px-4">
-                            <img src="ayto%20moguer.jpg" alt="Ayto Moguer" class="h-12 w-auto object-contain">
+                            <svg class="signature-svg" viewBox="0 0 320 120" aria-label="Firma del Ayuntamiento" role="img">
+                                <path d="M16 92 C 52 110, 80 90, 110 70 C 140 47, 162 33, 187 79 C 208 116, 245 96, 272 71 C 286 58, 300 55, 314 62"/>
+                                <path d="M180 74 C 196 59, 214 62, 230 74 C 246 85, 257 88, 268 81"/>
+                                <path d="M135 44 C 148 30, 171 25, 189 37"/>
+                                <path d="M177 14 C 157 31, 144 48, 147 74"/>
+                            </svg>
                             <img src="pmd%20moguer.jfif" alt="PMD Moguer" class="h-12 w-auto object-contain" onerror="this.src='pmd_2.jpg'">
                         </div>
 
